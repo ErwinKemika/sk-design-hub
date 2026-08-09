@@ -29,11 +29,8 @@ export function SiteHeader() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
-        <Link to="/" className="flex flex-col leading-none">
-          <span className="font-serif text-2xl font-bold tracking-tight text-gradient-gold">
-            SK.INTERIOR
-          </span>
-          <span className="eyebrow mt-1 text-[0.6rem]">Design & Construction</span>
+        <Link to="/" className="flex items-center">
+          <img src="/logo.png" alt="SK.Interior Design" className="h-10 w-auto lg:h-12" />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">

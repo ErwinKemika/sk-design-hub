@@ -11,15 +11,4 @@ export const IMAGES = {
   contact: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80",
 } as const;
 
-export const PORTFOLIO = [
-  { id: 1, title: "Rumah Modern Minimalis Bintaro", category: "Interior", img: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=900&q=80" },
-  { id: 2, title: "Gudang Baja Cikarang", category: "Konstruksi Baja", img: "https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=900&q=80" },
-  { id: 3, title: "Kitchen Set Custom Menteng", category: "Furniture", img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=900&q=80" },
-  { id: 4, title: "Renovasi Ruko Kemang", category: "Sipil", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=80" },
-  { id: 5, title: "Kantor Startup Kuningan", category: "Interior", img: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=80" },
-  { id: 6, title: "Wardrobe & Walk-in Closet BSD", category: "Furniture", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" },
-  { id: 7, title: "Kanopi Baja Perumahan", category: "Konstruksi Baja", img: "https://images.unsplash.com/photo-1565183928294-7063f23ce0f8?w=900&q=80" },
-  { id: 8, title: "Villa Modern Bogor", category: "Sipil", img: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=900&q=80" },
-];
-
 export const CATEGORIES = ["All", "Sipil", "Konstruksi Baja", "Interior", "Furniture"] as const;

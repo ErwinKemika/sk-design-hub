@@ -6,17 +6,22 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-charcoal">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-4 lg:px-10">
         <div>
-          <div className="font-serif text-2xl font-bold text-gradient-gold">SK.INTERIOR</div>
-          <div className="eyebrow mt-1">Design & Construction</div>
+          <img src="/logo.png" alt="SK.Interior Design" className="h-11 w-auto" />
           <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
             Sejak 2003, mitra terpercaya untuk kebutuhan konstruksi sipil, baja, desain interior,
             dan furniture custom. Presisi di setiap detail.
           </p>
           <div className="mt-6 flex gap-3">
-            <a href="#" className="grid h-10 w-10 place-items-center border border-border text-foreground/70 transition-colors hover:border-gold hover:text-gold">
+            <a
+              href="#"
+              className="grid h-10 w-10 place-items-center border border-border text-foreground/70 transition-colors hover:border-gold hover:text-gold"
+            >
               <Instagram size={16} />
             </a>
-            <a href="#" className="grid h-10 w-10 place-items-center border border-border text-foreground/70 transition-colors hover:border-gold hover:text-gold">
+            <a
+              href="#"
+              className="grid h-10 w-10 place-items-center border border-border text-foreground/70 transition-colors hover:border-gold hover:text-gold"
+            >
               <Facebook size={16} />
             </a>
           </div>

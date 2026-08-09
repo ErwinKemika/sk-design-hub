@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Compass, HeartHandshake, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, Compass, Gem, HeartHandshake, Shield } from "lucide-react";
 import { PageHero, SiteLayout } from "@/components/site/SiteLayout";
 import { Counter } from "@/components/site/Counter";
 import { IMAGES } from "@/lib/site-data";
@@ -7,20 +7,43 @@ import { IMAGES } from "@/lib/site-data";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "Tentang Kami — SK.INTERIOR.DESIGN" },
-      { name: "description", content: "Kisah perjalanan SK.INTERIOR.DESIGN sejak 2003 — dari kontraktor sipil menjadi mitra one-stop konstruksi & interior." },
+      { title: "Tentang Kami | SK.INTERIOR.DESIGN" },
+      {
+        name: "description",
+        content:
+          "Kisah perjalanan SK.INTERIOR.DESIGN sejak 2003, dari kontraktor sipil menjadi mitra one-stop konstruksi & interior.",
+      },
       { property: "og:title", content: "Tentang SK.INTERIOR.DESIGN" },
-      { property: "og:description", content: "Sejak 2003, membangun ruang dengan presisi dan integritas." },
+      {
+        property: "og:description",
+        content: "Sejak 2003, membangun ruang dengan presisi dan integritas.",
+      },
     ],
   }),
   component: AboutPage,
 });
 
 const VALUES = [
-  { icon: Sparkles, title: "Kualitas", desc: "Material terbaik, pengerjaan presisi, hasil akhir yang tahan waktu." },
-  { icon: Shield, title: "Integritas", desc: "Transparan dalam biaya, jujur dalam proses, konsisten dalam janji." },
-  { icon: HeartHandshake, title: "Kolaborasi", desc: "Mendengarkan klien dan bekerja sebagai satu tim menuju hasil terbaik." },
-  { icon: Compass, title: "Konsistensi", desc: "Standar yang sama untuk proyek kecil maupun skala besar." },
+  {
+    icon: Gem,
+    title: "Kualitas",
+    desc: "Material terbaik, pengerjaan presisi, hasil akhir yang tahan waktu.",
+  },
+  {
+    icon: Shield,
+    title: "Integritas",
+    desc: "Transparan dalam biaya, jujur dalam proses, konsisten dalam janji.",
+  },
+  {
+    icon: HeartHandshake,
+    title: "Kolaborasi",
+    desc: "Mendengarkan klien dan bekerja sebagai satu tim menuju hasil terbaik.",
+  },
+  {
+    icon: Compass,
+    title: "Konsistensi",
+    desc: "Standar yang sama untuk proyek kecil maupun skala besar.",
+  },
 ];
 
 function AboutPage() {
@@ -29,7 +52,7 @@ function AboutPage() {
       <PageHero
         eyebrow="Tentang Kami"
         title="Dua Dekade Membangun Ruang"
-        subtitle="Dari pekerjaan sipil hingga furniture custom — perjalanan panjang yang dibangun di atas kepercayaan."
+        subtitle="Dari pekerjaan sipil hingga furniture custom, perjalanan panjang membangun ruang dengan presisi, kepercayaan, dan cita rasa yang disempurnakan."
         image={IMAGES.page}
       />
 
@@ -53,16 +76,17 @@ function AboutPage() {
                 SK.INTERIOR.DESIGN berdiri sejak tahun 2003, berawal dari layanan pekerjaan sipil
                 skala kecil hingga menengah. Seiring berjalannya waktu dan kepercayaan klien yang
                 terus tumbuh, kami memperluas layanan ke konstruksi baja, desain interior, dan
-                furniture custom.
+                furniture custom, sekaligus mengasah kepekaan terhadap detail dan estetika di setiap
+                lini kerja.
               </p>
               <p>
                 Hari ini, kami hadir sebagai <span className="text-gold">one-stop solution</span>{" "}
                 untuk kebutuhan bangunan dan ruang Anda. Sipil, baja, interior, hingga meja, kitchen
-                set, dan lemari — semua dikerjakan tim yang sama, dengan standar kualitas yang
+                set, dan lemari. Semua dikerjakan tim yang sama, dengan standar kualitas yang
                 konsisten.
               </p>
               <p>
-                Setiap proyek — sekecil apapun — kami kerjakan dengan presisi, kualitas material
+                Setiap proyek, sekecil apapun, kami kerjakan dengan presisi, kualitas material
                 terbaik, dan hasil akhir yang tahan lama. Karena bagi kami, membangun bukan sekadar
                 menyusun struktur; ia adalah bentuk kepercayaan yang harus dijaga.
               </p>
@@ -78,11 +102,11 @@ function AboutPage() {
             <div className="eyebrow">Visi</div>
             <h3 className="mt-4 font-serif text-3xl font-bold">
               Menjadi mitra <span className="text-gradient-gold">konstruksi & interior</span>{" "}
-              terpercaya di setiap tahap.
+              terpercaya, dengan hasil akhir yang elegan di setiap tahap.
             </h3>
             <p className="mt-6 text-foreground/75">
               Menghadirkan solusi lengkap yang menyatukan kekuatan struktur, estetika desain, dan
-              ketelitian furniture — dalam satu standar mutu yang tinggi.
+              ketelitian furniture, disempurnakan dalam satu standar mutu yang tinggi.
             </p>
           </div>
           <div className="border border-border bg-background p-10">
@@ -114,7 +138,10 @@ function AboutPage() {
         </div>
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {VALUES.map((v) => (
-            <div key={v.title} className="group border border-border p-8 transition-colors hover:border-gold">
+            <div
+              key={v.title}
+              className="group border border-border p-8 transition-colors hover:border-gold"
+            >
               <v.icon className="text-gold" size={36} strokeWidth={1.4} />
               <h3 className="mt-6 font-serif text-xl font-semibold">{v.title}</h3>
               <p className="mt-3 text-sm text-foreground/70">{v.desc}</p>

@@ -15,10 +15,16 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
+.env
 
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
+
+# Raw source photos/videos for portfolio (uploaded via admin panel, not bundled in the app)
+portofolio/
+*.af~lock~
+logo sk interior.png
 
 # Editor directories and files
 .vscode/*

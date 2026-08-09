@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 
-export function Counter({ end, suffix = "+", label }: { end: number; suffix?: string; label: string }) {
+export function Counter({
+  end,
+  suffix = "+",
+  label,
+}: {
+  end: number;
+  suffix?: string;
+  label: string;
+}) {
   const [val, setVal] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const started = useRef(false);
@@ -22,7 +30,7 @@ export function Counter({ end, suffix = "+", label }: { end: number; suffix?: st
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
     if (ref.current) io.observe(ref.current);
     return () => io.disconnect();

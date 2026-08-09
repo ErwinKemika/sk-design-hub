@@ -7,8 +7,12 @@ import { IMAGES } from "@/lib/site-data";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Kontak — SK.INTERIOR.DESIGN" },
-      { name: "description", content: "Hubungi SK.INTERIOR.DESIGN untuk konsultasi proyek sipil, konstruksi baja, desain interior, atau furniture custom." },
+      { title: "Kontak | SK.INTERIOR.DESIGN" },
+      {
+        name: "description",
+        content:
+          "Hubungi SK.INTERIOR.DESIGN untuk konsultasi proyek sipil, konstruksi baja, desain interior, atau furniture custom.",
+      },
       { property: "og:title", content: "Hubungi SK.INTERIOR.DESIGN" },
       { property: "og:description", content: "Konsultasi gratis untuk proyek Anda." },
     ],
@@ -23,7 +27,7 @@ function ContactPage() {
       <PageHero
         eyebrow="Hubungi Kami"
         title="Mari Bicarakan Proyek Anda"
-        subtitle="Isi formulir atau hubungi kami langsung — kami merespon setiap pesan dengan serius."
+        subtitle="Isi formulir atau hubungi kami langsung. Kami merespon setiap pesan dengan serius."
         image={IMAGES.contact}
       />
 
@@ -36,7 +40,7 @@ function ContactPage() {
               Kami Siap <span className="text-gradient-gold">Mendengarkan</span>
             </h2>
             <p className="mt-6 text-foreground/75">
-              Baik proyek kecil maupun skala besar — konsultasi awal selalu gratis. Sampaikan
+              Baik proyek kecil maupun skala besar, konsultasi awal selalu gratis. Sampaikan
               kebutuhan Anda, tim kami akan membantu memetakan langkah selanjutnya.
             </p>
 
@@ -45,7 +49,11 @@ function ContactPage() {
                 { icon: MapPin, label: "Alamat", value: "[Alamat Kantor SK.Interior.Design]" },
                 { icon: Phone, label: "Telepon / WhatsApp", value: "[+62 8xx-xxxx-xxxx]" },
                 { icon: Mail, label: "Email", value: "[info@sk-interior.design]" },
-                { icon: Clock, label: "Jam Operasional", value: "Senin – Sabtu · 09.00 – 17.00 WIB" },
+                {
+                  icon: Clock,
+                  label: "Jam Operasional",
+                  value: "Senin – Sabtu · 09.00 – 17.00 WIB",
+                },
                 { icon: MessageCircle, label: "Area Layanan", value: "[Jabodetabek & sekitarnya]" },
               ].map((c) => (
                 <div key={c.label} className="flex gap-4 border-b border-border pb-6">
@@ -61,10 +69,16 @@ function ContactPage() {
             </div>
 
             <div className="mt-8 flex gap-3">
-              <a href="#" className="grid h-11 w-11 place-items-center border border-border text-foreground/70 transition-colors hover:border-gold hover:text-gold">
+              <a
+                href="#"
+                className="grid h-11 w-11 place-items-center border border-border text-foreground/70 transition-colors hover:border-gold hover:text-gold"
+              >
                 <Instagram size={16} />
               </a>
-              <a href="#" className="grid h-11 w-11 place-items-center border border-border text-foreground/70 transition-colors hover:border-gold hover:text-gold">
+              <a
+                href="#"
+                className="grid h-11 w-11 place-items-center border border-border text-foreground/70 transition-colors hover:border-gold hover:text-gold"
+              >
                 <MessageCircle size={16} />
               </a>
             </div>
@@ -79,7 +93,9 @@ function ContactPage() {
 
             {sent ? (
               <div className="mt-8 border border-gold/40 bg-background p-8 text-center">
-                <div className="font-serif text-2xl font-bold text-gradient-gold">Terima Kasih!</div>
+                <div className="font-serif text-2xl font-bold text-gradient-gold">
+                  Terima Kasih!
+                </div>
                 <p className="mt-3 text-sm text-foreground/75">
                   Permintaan Anda telah kami terima. Tim kami akan segera menghubungi Anda.
                 </p>

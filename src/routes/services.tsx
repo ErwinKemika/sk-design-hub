@@ -6,10 +6,17 @@ import { IMAGES } from "@/lib/site-data";
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
-      { title: "Layanan — SK.INTERIOR.DESIGN" },
-      { name: "description", content: "Sipil, konstruksi baja, desain interior, dan furniture custom — layanan lengkap sejak 2003." },
+      { title: "Layanan | SK.INTERIOR.DESIGN" },
+      {
+        name: "description",
+        content:
+          "Sipil, konstruksi baja, desain interior, dan furniture custom: layanan lengkap sejak 2003.",
+      },
       { property: "og:title", content: "Layanan SK.INTERIOR.DESIGN" },
-      { property: "og:description", content: "Empat layanan lengkap: sipil, baja, interior, furniture." },
+      {
+        property: "og:description",
+        content: "Empat layanan lengkap: sipil, baja, interior, furniture.",
+      },
     ],
   }),
   component: ServicesPage,
@@ -20,29 +27,49 @@ const SERVICES = [
     tag: "01",
     title: "Jasa Pekerjaan Sipil",
     img: IMAGES.civil,
-    desc: "Layanan konstruksi sipil menyeluruh — dari pondasi hingga finishing struktur bangunan. Kami menangani proyek residensial dan komersial dengan pendekatan teknis yang matang.",
-    items: ["Pembangunan struktur baru", "Renovasi & pengembangan bangunan", "Pondasi & pekerjaan beton", "Manajemen proyek end-to-end"],
+    desc: "Layanan konstruksi sipil menyeluruh, dari pondasi hingga finishing struktur bangunan. Kami menangani proyek residensial dan komersial dengan pendekatan teknis yang matang.",
+    items: [
+      "Pembangunan struktur baru",
+      "Renovasi & pengembangan bangunan",
+      "Pondasi & pekerjaan beton",
+      "Manajemen proyek end-to-end",
+    ],
   },
   {
     tag: "02",
     title: "Konstruksi Baja",
     img: IMAGES.steel,
-    desc: "Struktur baja presisi untuk berbagai kebutuhan — mulai kanopi rumah hingga gudang industri berskala besar. Fabrikasi in-house dengan quality control ketat.",
-    items: ["Rangka atap & kanopi baja ringan/berat", "Struktur gudang & pabrik", "Mezzanine & platform baja", "Fabrikasi baja custom sesuai gambar"],
+    desc: "Struktur baja presisi untuk berbagai kebutuhan, mulai kanopi rumah hingga gudang industri berskala besar. Fabrikasi in-house dengan quality control ketat.",
+    items: [
+      "Rangka atap & kanopi baja ringan/berat",
+      "Struktur gudang & pabrik",
+      "Mezzanine & platform baja",
+      "Fabrikasi baja custom sesuai gambar",
+    ],
   },
   {
     tag: "03",
     title: "Desain & Interior",
     img: IMAGES.interior,
-    desc: "Menerjemahkan gaya hidup dan identitas brand Anda ke dalam ruang — dari konsep, 3D render, hingga eksekusi finishing yang matang.",
-    items: ["Interior rumah tinggal", "Interior kantor & ruang komersial", "Konsultasi konsep & moodboard", "Finishing interior menyeluruh"],
+    desc: "Menerjemahkan gaya hidup dan identitas brand Anda ke dalam ruang, dari konsep, 3D render, hingga eksekusi finishing yang matang.",
+    items: [
+      "Interior rumah tinggal",
+      "Interior kantor & ruang komersial",
+      "Konsultasi konsep & moodboard",
+      "Finishing interior menyeluruh",
+    ],
   },
   {
     tag: "04",
     title: "Custom Furniture",
     img: IMAGES.furniture,
     desc: "Furniture dirancang khusus untuk ukuran, material, dan gaya ruang Anda. Presisi milimeter, hasil akhir yang rapi dan tahan lama.",
-    items: ["Kitchen set custom", "Lemari & wardrobe custom", "Meja kerja, meja makan, meja custom", "Furniture custom lainnya sesuai kebutuhan"],
+    items: [
+      "Kitchen set custom",
+      "Lemari & wardrobe custom",
+      "Meja kerja, meja makan, meja custom",
+      "Furniture custom lainnya sesuai kebutuhan",
+    ],
   },
 ];
 
@@ -52,7 +79,7 @@ function ServicesPage() {
       <PageHero
         eyebrow="Layanan Kami"
         title="Empat Layanan Satu Standar"
-        subtitle="Dari struktur bangunan hingga detail furniture — semua dikerjakan tim yang sama, dengan standar kualitas yang konsisten."
+        subtitle="Dari struktur bangunan hingga detail furniture, semua dikerjakan tim yang sama, dengan standar kualitas yang konsisten."
         image={IMAGES.page}
       />
 
@@ -102,8 +129,8 @@ function ServicesPage() {
             Konsultasikan <span className="text-gradient-gold">Proyek Anda</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-foreground/75">
-            Ceritakan visi Anda, tim kami akan bantu memetakan kebutuhan teknis, estimasi biaya,
-            dan timeline pengerjaan.
+            Ceritakan visi Anda, tim kami akan bantu memetakan kebutuhan teknis, estimasi biaya, dan
+            timeline pengerjaan.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Link to="/contact" className="btn-gold">

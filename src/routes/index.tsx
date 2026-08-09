@@ -1,23 +1,56 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, Award, Building2, Check, Hammer, Quote, Sofa, Star, Wrench } from "lucide-react";
+import {
+  ArrowRight,
+  Award,
+  Building2,
+  Check,
+  Hammer,
+  Quote,
+  Sofa,
+  Star,
+  Wrench,
+} from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Counter } from "@/components/site/Counter";
-import { IMAGES, PORTFOLIO } from "@/lib/site-data";
+import { CircularGallery } from "@/components/site/CircularGallery";
+import { IMAGES } from "@/lib/site-data";
+import { supabase, type Article, type PortfolioItem } from "@/lib/supabase";
 
 export const Route = createFileRoute("/")({
+  loader: async () => {
+    const [{ data: portfolio }, { data: posts }] = await Promise.all([
+      supabase
+        .from("portfolio_items")
+        .select("*")
+        .eq("status", "published")
+        .order("created_at", { ascending: false })
+        .limit(6),
+      supabase
+        .from("articles")
+        .select("*")
+        .eq("status", "published")
+        .order("published_at", { ascending: false })
+        .limit(3),
+    ]);
+    return {
+      portfolio: (portfolio as PortfolioItem[]) ?? [],
+      posts: (posts as Article[]) ?? [],
+    };
+  },
   head: () => ({
     meta: [
-      { title: "SK.INTERIOR.DESIGN — Wujudkan Ruang Impian" },
+      { title: "SK.INTERIOR.DESIGN | Wujudkan Ruang Impian" },
       {
         name: "description",
         content:
           "Sejak 2003. Pekerjaan sipil, konstruksi baja, desain interior, dan furniture custom dengan presisi dan kualitas terbaik.",
       },
-      { property: "og:title", content: "SK.INTERIOR.DESIGN — Wujudkan Ruang Impian" },
+      { property: "og:title", content: "SK.INTERIOR.DESIGN | Wujudkan Ruang Impian" },
       {
         property: "og:description",
-        content: "Konstruksi & interior premium sejak 2003. Sipil, baja, interior, furniture custom.",
+        content:
+          "Konstruksi & interior premium sejak 2003. Sipil, baja, interior, furniture custom.",
       },
     ],
   }),
@@ -43,32 +76,70 @@ const SLIDES = [
 ];
 
 const SERVICES = [
-  { icon: Building2, title: "Pekerjaan Sipil", desc: "Pembangunan struktur, renovasi, pondasi, dan manajemen proyek dengan standar teknis tinggi." },
-  { icon: Hammer, title: "Konstruksi Baja", desc: "Rangka atap, kanopi, struktur gudang, mezzanine, hingga fabrikasi baja custom." },
-  { icon: Sofa, title: "Desain & Interior", desc: "Interior rumah, kantor, dan komersial — dari konsep hingga finishing." },
-  { icon: Wrench, title: "Custom Furniture", desc: "Kitchen set, lemari, meja, dan furniture custom presisi milimeter." },
+  {
+    icon: Building2,
+    title: "Pekerjaan Sipil",
+    desc: "Pembangunan struktur, renovasi, pondasi, dan manajemen proyek dengan standar teknis tinggi.",
+  },
+  {
+    icon: Hammer,
+    title: "Konstruksi Baja",
+    desc: "Rangka atap, kanopi, struktur gudang, mezzanine, hingga fabrikasi baja custom.",
+  },
+  {
+    icon: Sofa,
+    title: "Desain & Interior",
+    desc: "Interior rumah, kantor, dan komersial, dari konsep hingga finishing.",
+  },
+  {
+    icon: Wrench,
+    title: "Custom Furniture",
+    desc: "Kitchen set, lemari, meja, dan furniture custom presisi milimeter.",
+  },
 ];
 
 const WHY = [
-  { title: "20+ Tahun Pengalaman", desc: "Rekam jejak sejak 2003 di proyek residensial hingga komersial." },
-  { title: "Layanan Lengkap Satu Atap", desc: "Sipil, baja, interior, dan furniture — tanpa pindah vendor." },
-  { title: "Kualitas & Presisi Custom", desc: "Setiap sambungan, finishing, dan detail dikerjakan terukur." },
-  { title: "Dipercaya Klien Rumahan & Komersial", desc: "Hunian pribadi, ruko, kantor, hingga gudang industri." },
+  {
+    title: "20+ Tahun Pengalaman",
+    desc: "Rekam jejak sejak 2003 di proyek residensial hingga komersial.",
+  },
+  {
+    title: "Layanan Lengkap Satu Atap",
+    desc: "Sipil, baja, interior, dan furniture, tanpa pindah vendor.",
+  },
+  {
+    title: "Kualitas & Presisi Custom",
+    desc: "Setiap sambungan, finishing, dan detail dikerjakan terukur.",
+  },
+  {
+    title: "Dipercaya Klien Rumahan & Komersial",
+    desc: "Hunian pribadi, ruko, kantor, hingga gudang industri.",
+  },
 ];
 
 const TESTIMONIALS = [
-  { name: "[Nama Klien]", role: "Pemilik Rumah · Bintaro", text: "Tim SK sangat detail dari desain sampai finishing. Kitchen set kami rapi presisi, hasilnya jauh melebihi ekspektasi.", stars: 5 },
-  { name: "[Nama Klien]", role: "Direktur · PT Placeholder", text: "Pengerjaan struktur baja untuk gudang kami selesai tepat waktu dan sangat kokoh. Komunikasi rapi.", stars: 5 },
-  { name: "[Nama Klien]", role: "Pemilik Kafe · Kemang", text: "Renovasi interior kafe kami dibuat sesuai konsep. Estetik, fungsional, dan tahan lama.", stars: 5 },
-];
-
-const BLOG = [
-  { title: "5 Kesalahan Umum Saat Merenovasi Rumah", cat: "Tips Renovasi", date: "12 Jul 2026" },
-  { title: "Kelebihan Struktur Baja untuk Bangunan Modern", cat: "Konstruksi", date: "28 Jun 2026" },
-  { title: "Memilih Material Kitchen Set yang Tahan Lama", cat: "Interior", date: "15 Jun 2026" },
+  {
+    name: "[Nama Klien]",
+    role: "Pemilik Rumah · Bintaro",
+    text: "Tim SK sangat detail dari desain sampai finishing. Kitchen set kami rapi presisi, hasilnya jauh melebihi ekspektasi.",
+    stars: 5,
+  },
+  {
+    name: "[Nama Klien]",
+    role: "Direktur · PT Placeholder",
+    text: "Pengerjaan struktur baja untuk gudang kami selesai tepat waktu dan sangat kokoh. Komunikasi rapi.",
+    stars: 5,
+  },
+  {
+    name: "[Nama Klien]",
+    role: "Pemilik Kafe · Kemang",
+    text: "Renovasi interior kafe kami dibuat sesuai konsep. Estetik, fungsional, dan tahan lama.",
+    stars: 5,
+  },
 ];
 
 function HomePage() {
+  const { portfolio, posts } = Route.useLoaderData();
   const [slide, setSlide] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setSlide((s) => (s + 1) % SLIDES.length), 6000);
@@ -86,7 +157,11 @@ function HomePage() {
               i === slide ? "opacity-100" : "opacity-0"
             }`}
           >
-            <img src={s.img} alt="" className={`h-full w-full object-cover ${i === slide ? "kenburns" : ""}`} />
+            <img
+              src={s.img}
+              alt=""
+              className={`h-full w-full object-cover ${i === slide ? "kenburns" : ""}`}
+            />
             <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/90" />
           </div>
         ))}
@@ -102,7 +177,7 @@ function HomePage() {
               ))}
             </h1>
             <p className="mt-6 max-w-xl text-base text-foreground/80 md:text-lg">
-              Mitra konstruksi & interior terpercaya sejak 2003 — sipil, baja, desain, dan furniture
+              Mitra konstruksi & interior terpercaya sejak 2003, sipil, baja, desain, dan furniture
               custom dikerjakan dengan presisi.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
@@ -147,13 +222,18 @@ function HomePage() {
             </h2>
             <p className="mt-6 text-base leading-relaxed text-foreground/75">
               SK.INTERIOR.DESIGN adalah mitra terpercaya untuk kebutuhan konstruksi dan interior
-              Anda — mulai dari pekerjaan sipil, konstruksi baja, desain interior, hingga furniture
+              Anda, mulai dari pekerjaan sipil, konstruksi baja, desain interior, hingga furniture
               custom seperti meja, kitchen set, dan lemari. Berpengalaman sejak 2003, kami
               mengerjakan setiap proyek dengan presisi, kualitas material terbaik, dan hasil akhir
               yang tahan lama.
             </p>
             <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {["Sejak 2003", "One-Stop Solution", "Presisi Custom", "Klien Rumahan & Komersial"].map((t) => (
+              {[
+                "Sejak 2003",
+                "One-Stop Solution",
+                "Presisi Custom",
+                "Klien Rumahan & Komersial",
+              ].map((t) => (
                 <li key={t} className="flex items-center gap-3 text-sm">
                   <span className="grid h-6 w-6 shrink-0 place-items-center border border-gold text-gold">
                     <Check size={12} />
@@ -178,8 +258,8 @@ function HomePage() {
               Empat Layanan, <span className="text-gradient-gold">Satu Standar</span>
             </h2>
             <p className="mt-4 text-foreground/70">
-              Dari struktur hingga detail furniture — semua dikerjakan tim yang sama, dengan
-              standar kualitas yang konsisten.
+              Dari struktur hingga detail furniture, semua dikerjakan tim yang sama, dengan standar
+              kualitas yang konsisten.
             </p>
           </div>
           <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -205,43 +285,19 @@ function HomePage() {
       </section>
 
       {/* PORTFOLIO */}
-      <section className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
+      {portfolio.length === 0 ? (
+        <section className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+          <div className="text-center">
             <div className="eyebrow">Portofolio Terbaru</div>
             <h2 className="mt-4 font-serif text-4xl font-bold md:text-5xl">
               Proyek <span className="text-gradient-gold">Pilihan</span>
             </h2>
+            <p className="mt-12 text-foreground/60">Belum ada proyek portofolio.</p>
           </div>
-          <Link to="/portfolio" className="btn-outline-gold">
-            Lihat Semua <ArrowRight size={16} />
-          </Link>
-        </div>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {PORTFOLIO.slice(0, 6).map((p, i) => (
-            <div
-              key={p.id}
-              className={`group relative overflow-hidden ${
-                i === 0 ? "lg:col-span-2 lg:row-span-2 aspect-square lg:aspect-auto" : "aspect-[4/3]"
-              }`}
-            >
-              <img
-                src={p.img}
-                alt={p.title}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                <div className="eyebrow">{p.category}</div>
-                <h3 className="mt-2 font-serif text-xl font-semibold">{p.title}</h3>
-                <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gold">
-                  View Project <ArrowRight size={14} />
-                </div>
-              </div>
-              <div className="pointer-events-none absolute inset-4 border border-gold/0 transition-all duration-500 group-hover:inset-3 group-hover:border-gold/60" />
-            </div>
-          ))}
-        </div>
-      </section>
+        </section>
+      ) : (
+        <CircularGallery items={portfolio} />
+      )}
 
       {/* STATS */}
       <section className="relative overflow-hidden bg-charcoal py-24">
@@ -265,8 +321,8 @@ function HomePage() {
               Dua Dekade <span className="text-gradient-gold">Kepercayaan</span>
             </h2>
             <p className="mt-6 text-foreground/75">
-              Kami tidak hanya membangun struktur atau memasang furniture — kami membangun
-              hubungan jangka panjang dengan klien lewat konsistensi kualitas.
+              Kami tidak hanya membangun struktur atau memasang furniture. Kami membangun hubungan
+              jangka panjang dengan klien lewat konsistensi kualitas.
             </p>
             <Link to="/about" className="btn-outline-gold mt-8">
               Cerita Lengkap <ArrowRight size={16} />
@@ -274,7 +330,10 @@ function HomePage() {
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
             {WHY.map((w, i) => (
-              <div key={w.title} className="border border-border p-6 transition-colors hover:border-gold">
+              <div
+                key={w.title}
+                className="border border-border p-6 transition-colors hover:border-gold"
+              >
                 <div className="font-serif text-3xl font-bold text-gradient-gold">0{i + 1}</div>
                 <h3 className="mt-4 font-serif text-lg font-semibold">{w.title}</h3>
                 <p className="mt-2 text-sm text-foreground/70">{w.desc}</p>
@@ -348,25 +407,41 @@ function HomePage() {
             Semua Artikel <ArrowRight size={16} />
           </Link>
         </div>
+        {posts.length === 0 && (
+          <p className="mt-12 text-center text-foreground/60">
+            Belum ada artikel yang dipublikasikan.
+          </p>
+        )}
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {BLOG.map((b, i) => (
+          {posts.map((b) => (
             <Link
-              key={i}
-              to="/blog"
+              key={b.id}
+              to="/blog/$slug"
+              params={{ slug: b.slug }}
               className="group block border border-border transition-colors hover:border-gold"
             >
               <div className="aspect-[16/10] overflow-hidden">
                 <img
-                  src={PORTFOLIO[i + 2].img}
+                  src={b.cover_image_url ?? IMAGES.page}
                   alt=""
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="eyebrow !text-gold">{b.cat}</span>
-                  <span>·</span>
-                  <span>{b.date}</span>
+                  <span className="eyebrow !text-gold">{b.category}</span>
+                  {b.published_at && (
+                    <>
+                      <span>·</span>
+                      <span>
+                        {new Date(b.published_at).toLocaleDateString("id-ID", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </>
+                  )}
                 </div>
                 <h3 className="mt-3 font-serif text-lg font-semibold leading-snug transition-colors group-hover:text-gold">
                   {b.title}
