@@ -14,6 +14,7 @@ import {
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Counter } from "@/components/site/Counter";
 import { CircularGallery } from "@/components/site/CircularGallery";
+import { ParticleWave } from "@/components/ui/particle-wave";
 import { IMAGES } from "@/lib/site-data";
 import { supabase, type Article, type PortfolioItem } from "@/lib/supabase";
 
@@ -250,8 +251,9 @@ function HomePage() {
       </section>
 
       {/* SERVICES */}
-      <section className="bg-charcoal py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+      <section className="relative overflow-hidden bg-charcoal py-24">
+        <ParticleWave className="opacity-60" />
+        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10">
           <div className="mx-auto max-w-2xl text-center">
             <div className="eyebrow">Layanan Kami</div>
             <h2 className="mt-4 font-serif text-4xl font-bold md:text-5xl">

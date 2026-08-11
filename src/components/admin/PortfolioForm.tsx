@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ImageUploader } from "@/components/admin/ImageUploader";
+import { SeoFields } from "@/components/admin/SeoFields";
 
 const CATEGORIES: PortfolioCategory[] = ["Sipil", "Konstruksi Baja", "Interior", "Furniture"];
 
@@ -180,24 +181,17 @@ export function PortfolioForm({
 
       <div className="space-y-4 border-t border-border pt-6">
         <div className="text-sm font-semibold text-gold">SEO (opsional)</div>
-        <div className="space-y-2">
-          <Label htmlFor="seo_title">Meta Title</Label>
-          <Input
-            id="seo_title"
-            value={values.seo_title}
-            onChange={(e) => update("seo_title", e.target.value)}
-            placeholder={values.title}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="seo_description">Meta Description</Label>
-          <Textarea
-            id="seo_description"
-            rows={3}
-            value={values.seo_description}
-            onChange={(e) => update("seo_description", e.target.value)}
-          />
-        </div>
+        <SeoFields
+          seoTitle={values.seo_title}
+          seoDescription={values.seo_description}
+          onSeoTitleChange={(v) => update("seo_title", v)}
+          onSeoDescriptionChange={(v) => update("seo_description", v)}
+          fallbackTitle={values.title}
+          fallbackDescription={values.description}
+          slug={values.slug}
+          urlPrefix="/portfolio/"
+          content={values.description}
+        />
       </div>
 
       <Button type="submit" disabled={saving}>

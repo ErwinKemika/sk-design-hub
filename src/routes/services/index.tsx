@@ -2,76 +2,26 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check } from "lucide-react";
 import { PageHero, SiteLayout } from "@/components/site/SiteLayout";
 import { IMAGES } from "@/lib/site-data";
+import { SERVICES } from "@/lib/services-data";
 
-export const Route = createFileRoute("/services")({
+export const Route = createFileRoute("/services/")({
   head: () => ({
     meta: [
       { title: "Layanan | SK.INTERIOR.DESIGN" },
       {
         name: "description",
         content:
-          "Sipil, konstruksi baja, desain interior, dan furniture custom: layanan lengkap sejak 2003.",
+          "Custom furniture, sipil, konstruksi baja, dan desain interior: layanan lengkap sejak 2003.",
       },
       { property: "og:title", content: "Layanan SK.INTERIOR.DESIGN" },
       {
         property: "og:description",
-        content: "Empat layanan lengkap: sipil, baja, interior, furniture.",
+        content: "Empat layanan lengkap: furniture, sipil, baja, interior.",
       },
     ],
   }),
   component: ServicesPage,
 });
-
-const SERVICES = [
-  {
-    tag: "01",
-    title: "Jasa Pekerjaan Sipil",
-    img: IMAGES.civil,
-    desc: "Layanan konstruksi sipil menyeluruh, dari pondasi hingga finishing struktur bangunan. Kami menangani proyek residensial dan komersial dengan pendekatan teknis yang matang.",
-    items: [
-      "Pembangunan struktur baru",
-      "Renovasi & pengembangan bangunan",
-      "Pondasi & pekerjaan beton",
-      "Manajemen proyek end-to-end",
-    ],
-  },
-  {
-    tag: "02",
-    title: "Konstruksi Baja",
-    img: IMAGES.steel,
-    desc: "Struktur baja presisi untuk berbagai kebutuhan, mulai kanopi rumah hingga gudang industri berskala besar. Fabrikasi in-house dengan quality control ketat.",
-    items: [
-      "Rangka atap & kanopi baja ringan/berat",
-      "Struktur gudang & pabrik",
-      "Mezzanine & platform baja",
-      "Fabrikasi baja custom sesuai gambar",
-    ],
-  },
-  {
-    tag: "03",
-    title: "Desain & Interior",
-    img: IMAGES.interior,
-    desc: "Menerjemahkan gaya hidup dan identitas brand Anda ke dalam ruang, dari konsep, 3D render, hingga eksekusi finishing yang matang.",
-    items: [
-      "Interior rumah tinggal",
-      "Interior kantor & ruang komersial",
-      "Konsultasi konsep & moodboard",
-      "Finishing interior menyeluruh",
-    ],
-  },
-  {
-    tag: "04",
-    title: "Custom Furniture",
-    img: IMAGES.furniture,
-    desc: "Furniture dirancang khusus untuk ukuran, material, dan gaya ruang Anda. Presisi milimeter, hasil akhir yang rapi dan tahan lama.",
-    items: [
-      "Kitchen set custom",
-      "Lemari & wardrobe custom",
-      "Meja kerja, meja makan, meja custom",
-      "Furniture custom lainnya sesuai kebutuhan",
-    ],
-  },
-];
 
 function ServicesPage() {
   return (
@@ -79,14 +29,14 @@ function ServicesPage() {
       <PageHero
         eyebrow="Layanan Kami"
         title="Empat Layanan Satu Standar"
-        subtitle="Dari struktur bangunan hingga detail furniture, semua dikerjakan tim yang sama, dengan standar kualitas yang konsisten."
+        subtitle="Dari furniture custom hingga struktur bangunan, semua dikerjakan tim yang sama, dengan standar kualitas yang konsisten."
         image={IMAGES.page}
       />
 
       <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
         {SERVICES.map((s, i) => (
           <section
-            key={s.tag}
+            key={s.slug}
             className={`grid items-center gap-14 py-16 lg:grid-cols-2 ${
               i !== 0 ? "border-t border-border" : ""
             }`}
@@ -102,9 +52,9 @@ function ServicesPage() {
               <h2 className="mt-4 font-serif text-3xl font-bold leading-tight md:text-5xl">
                 {s.title}
               </h2>
-              <p className="mt-6 text-foreground/75">{s.desc}</p>
+              <p className="mt-6 text-foreground/75">{s.shortDesc}</p>
               <ul className="mt-8 space-y-3">
-                {s.items.map((it) => (
+                {s.items.slice(0, 4).map((it) => (
                   <li key={it} className="flex gap-3 text-sm">
                     <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center border border-gold text-gold">
                       <Check size={12} />
@@ -113,9 +63,14 @@ function ServicesPage() {
                   </li>
                 ))}
               </ul>
-              <Link to="/contact" className="btn-outline-gold mt-10">
-                Minta Penawaran <ArrowRight size={16} />
-              </Link>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Link to="/services/$slug" params={{ slug: s.slug }} className="btn-gold">
+                  Lihat Detail Layanan <ArrowRight size={16} />
+                </Link>
+                <Link to="/contact" className="btn-outline-gold">
+                  Minta Penawaran
+                </Link>
+              </div>
             </div>
           </section>
         ))}

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, type HTMLAttributes } from "react";
+import React, { useEffect, useRef, useState, type HTMLAttributes } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface GalleryItem {
@@ -16,59 +17,67 @@ interface CircularGalleryProps extends HTMLAttributes<HTMLDivElement> {
   items: GalleryItem[];
   /** Controls how far the items are from the center. */
   radius?: number;
-  /** Controls the speed of auto-rotation when not scrolling. */
+  /** Controls the speed of ambient auto-rotation when idle. */
   autoRotateSpeed?: number;
 }
 
 const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
-  ({ items, className, radius = 600, autoRotateSpeed = 0.02, ...props }, ref) => {
+  ({ items, className, radius = 600, autoRotateSpeed = 0.05, ...props }, ref) => {
     const [rotation, setRotation] = useState(0);
-    const [isScrolling, setIsScrolling] = useState(false);
-    const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [isInteracting, setIsInteracting] = useState(false);
+    const idleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const animationFrameRef = useRef<number | null>(null);
+    const dragRef = useRef<{ startX: number; startRotation: number } | null>(null);
 
-    useEffect(() => {
-      const handleScroll = () => {
-        setIsScrolling(true);
-        if (scrollTimeoutRef.current) {
-          clearTimeout(scrollTimeoutRef.current);
-        }
-
-        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollProgress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
-        const scrollRotation = scrollProgress * 360;
-        setRotation(scrollRotation);
-
-        scrollTimeoutRef.current = setTimeout(() => {
-          setIsScrolling(false);
-        }, 150);
-      };
-
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-        if (scrollTimeoutRef.current) {
-          clearTimeout(scrollTimeoutRef.current);
-        }
-      };
-    }, []);
-
+    // Ambient auto-rotation while idle (not dragging/scrolling)
     useEffect(() => {
       const autoRotate = () => {
-        if (!isScrolling) {
+        if (!isInteracting) {
           setRotation((prev) => prev + autoRotateSpeed);
         }
         animationFrameRef.current = requestAnimationFrame(autoRotate);
       };
-
       animationFrameRef.current = requestAnimationFrame(autoRotate);
-
       return () => {
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
+        if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
       };
-    }, [isScrolling, autoRotateSpeed]);
+    }, [isInteracting, autoRotateSpeed]);
+
+    function markInteracting() {
+      setIsInteracting(true);
+      if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+      idleTimeoutRef.current = setTimeout(() => setIsInteracting(false), 1200);
+    }
+
+    function handlePointerDown(e: React.PointerEvent) {
+      dragRef.current = { startX: e.clientX, startRotation: rotation };
+      markInteracting();
+      (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    }
+
+    function handlePointerMove(e: React.PointerEvent) {
+      if (!dragRef.current) return;
+      markInteracting();
+      const deltaX = e.clientX - dragRef.current.startX;
+      setRotation(dragRef.current.startRotation + deltaX * 0.3);
+    }
+
+    function handlePointerUp() {
+      dragRef.current = null;
+    }
+
+    function handleWheel(e: React.WheelEvent) {
+      // Only take over horizontal gestures; let vertical page scroll pass through.
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      markInteracting();
+      setRotation((prev) => prev + e.deltaX * 0.3);
+    }
+
+    function step(direction: 1 | -1) {
+      markInteracting();
+      setRotation((prev) => prev + direction * (360 / items.length));
+    }
 
     const anglePerItem = 360 / items.length;
 
@@ -77,8 +86,16 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         ref={ref}
         role="region"
         aria-label="Circular 3D Gallery"
-        className={cn("relative flex h-full w-full items-center justify-center", className)}
-        style={{ perspective: "2000px" }}
+        className={cn(
+          "relative flex h-full w-full touch-pan-y select-none items-center justify-center",
+          className,
+        )}
+        style={{ perspective: "2000px", cursor: dragRef.current ? "grabbing" : "grab" }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+        onWheel={handleWheel}
         {...props}
       >
         <div
@@ -95,7 +112,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
             const normalizedAngle = Math.abs(
               relativeAngle > 180 ? 360 - relativeAngle : relativeAngle,
             );
-            const opacity = Math.max(0.3, 1 - normalizedAngle / 180);
+            const opacity = Math.max(0.25, 1 - normalizedAngle / 180);
 
             return (
               <div
@@ -109,7 +126,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                   top: "50%",
                   marginLeft: "-110px",
                   marginTop: "-140px",
-                  opacity: opacity,
+                  opacity,
                   transition: "opacity 0.3s linear",
                 }}
               >
@@ -117,6 +134,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                   <img
                     src={item.photo.url}
                     alt={item.photo.text}
+                    draggable={false}
                     className="absolute inset-0 h-full w-full object-cover"
                     style={{ objectPosition: item.photo.pos || "center" }}
                   />
@@ -130,6 +148,23 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
             );
           })}
         </div>
+
+        <button
+          type="button"
+          aria-label="Sebelumnya"
+          onClick={() => step(-1)}
+          className="absolute left-2 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center border border-gold/40 bg-black/40 text-gold backdrop-blur-sm transition-colors hover:border-gold hover:bg-black/60 sm:left-6"
+        >
+          <ChevronLeft size={18} />
+        </button>
+        <button
+          type="button"
+          aria-label="Selanjutnya"
+          onClick={() => step(1)}
+          className="absolute right-2 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center border border-gold/40 bg-black/40 text-gold backdrop-blur-sm transition-colors hover:border-gold hover:bg-black/60 sm:right-6"
+        >
+          <ChevronRight size={18} />
+        </button>
       </div>
     );
   },
