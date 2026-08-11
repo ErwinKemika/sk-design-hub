@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { CONTACT } from "@/lib/site-data";
 
 export function SiteFooter() {
   return (
@@ -63,17 +64,21 @@ export function SiteFooter() {
           <ul className="mt-5 space-y-4 text-sm text-foreground/80">
             <li className="flex gap-3">
               <MapPin size={16} className="mt-0.5 shrink-0 text-gold" />
-              <span>[Alamat Kantor SK.Interior.Design]</span>
+              <span>{CONTACT.address}</span>
             </li>
             <li className="flex gap-3">
               <Phone size={16} className="mt-0.5 shrink-0 text-gold" />
-              <span>[+62 8xx-xxxx-xxxx]</span>
+              <a href={CONTACT.whatsappUrl} className="transition-colors hover:text-gold">
+                {CONTACT.phoneDisplay}
+              </a>
             </li>
             <li className="flex gap-3">
               <Mail size={16} className="mt-0.5 shrink-0 text-gold" />
-              <span>[info@sk-interior.design]</span>
+              <a href={`mailto:${CONTACT.email}`} className="transition-colors hover:text-gold">
+                {CONTACT.email}
+              </a>
             </li>
-            <li className="text-muted-foreground">Senin – Sabtu · 09.00 – 17.00 WIB</li>
+            <li className="text-muted-foreground">{CONTACT.hours}</li>
           </ul>
         </div>
       </div>

@@ -12,3 +12,20 @@ export const IMAGES = {
 } as const;
 
 export const CATEGORIES = ["All", "Sipil", "Konstruksi Baja", "Interior", "Furniture"] as const;
+
+const GOOGLE_MAPS_QUERY =
+  "Sk.+Interior,+Jl.+Bayangkara+Pusdiklantas,+Paku+Jaya,+Kec.+Serpong+Utara,+Kota+Tangerang+Selatan,+Banten+15324";
+const GOOGLE_MAPS_FTID = "0x2e69fbca24e9c1e5:0x5e0606a36c9798e2";
+
+export const CONTACT = {
+  address:
+    "Jl. Bayangkara Pusdiklantas, Paku Jaya, Kec. Serpong Utara, Kota Tangerang Selatan, Banten 15324",
+  phoneDisplay: "0813-8492-0084",
+  whatsappUrl: "https://wa.me/6281384920084",
+  email: "skinterior.design26@gmail.com",
+  hours: "Senin – Minggu · 07.00 – 22.00 WIB",
+  serviceArea: "Jabodetabek & sekitarnya",
+  // Pinned to the exact "Sk. Interior" Google Business Profile, not just an address search.
+  mapsUrl: `https://maps.google.com/maps?q=${GOOGLE_MAPS_QUERY}&ftid=${GOOGLE_MAPS_FTID}`,
+  mapEmbedUrl: `https://www.google.com/maps?q=${GOOGLE_MAPS_QUERY}&ftid=${GOOGLE_MAPS_FTID}&output=embed`,
+} as const;

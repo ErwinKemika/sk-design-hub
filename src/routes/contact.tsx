@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Clock, Instagram, Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
 import { PageHero, SiteLayout } from "@/components/site/SiteLayout";
-import { IMAGES } from "@/lib/site-data";
+import { CONTACT, IMAGES } from "@/lib/site-data";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -20,8 +21,73 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
+const SERVICE_OPTIONS = [
+  "Pekerjaan Sipil",
+  "Konstruksi Baja",
+  "Desain & Interior",
+  "Custom Furniture",
+  "Lainnya",
+];
+
+const PHONE_REGEX = /^(?:\+62|62|0)8[1-9][0-9]{6,10}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+type FormValues = {
+  name: string;
+  phone: string;
+  email: string;
+  service: string;
+  message: string;
+};
+
+type FormErrors = Partial<Record<keyof FormValues, string>>;
+
+const EMPTY_VALUES: FormValues = { name: "", phone: "", email: "", service: "", message: "" };
+
+function validate(values: FormValues): FormErrors {
+  const errors: FormErrors = {};
+  if (values.name.trim().length < 3) errors.name = "Nama minimal 3 karakter.";
+  if (!PHONE_REGEX.test(values.phone.trim()))
+    errors.phone = "Format nomor tidak valid, contoh: 0813-xxxx-xxxx.";
+  if (!EMAIL_REGEX.test(values.email.trim())) errors.email = "Format email tidak valid.";
+  if (!values.service) errors.service = "Pilih salah satu layanan.";
+  if (values.message.trim().length < 10)
+    errors.message = "Ceritakan kebutuhan Anda lebih detail (min. 10 karakter).";
+  return errors;
+}
+
+function buildWhatsappMessage(values: FormValues) {
+  return [
+    "Halo SK.Interior Design, saya ingin konsultasi proyek:",
+    "",
+    `Nama: ${values.name.trim()}`,
+    `No. HP: ${values.phone.trim()}`,
+    `Email: ${values.email.trim()}`,
+    `Layanan: ${values.service}`,
+    `Pesan: ${values.message.trim()}`,
+  ].join("\n");
+}
+
 function ContactPage() {
+  const [values, setValues] = useState<FormValues>(EMPTY_VALUES);
+  const [errors, setErrors] = useState<FormErrors>({});
   const [sent, setSent] = useState(false);
+
+  function update<K extends keyof FormValues>(key: K, value: FormValues[K]) {
+    setValues((v) => ({ ...v, [key]: value }));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const nextErrors = validate(values);
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    const text = encodeURIComponent(buildWhatsappMessage(values));
+    window.open(`${CONTACT.whatsappUrl}?text=${text}`, "_blank", "noopener,noreferrer");
+    setSent(true);
+  }
+
   return (
     <SiteLayout>
       <PageHero
@@ -46,15 +112,21 @@ function ContactPage() {
 
             <div className="mt-10 space-y-6">
               {[
-                { icon: MapPin, label: "Alamat", value: "[Alamat Kantor SK.Interior.Design]" },
-                { icon: Phone, label: "Telepon / WhatsApp", value: "[+62 8xx-xxxx-xxxx]" },
-                { icon: Mail, label: "Email", value: "[info@sk-interior.design]" },
+                { icon: MapPin, label: "Alamat", value: CONTACT.address, href: CONTACT.mapsUrl },
                 {
-                  icon: Clock,
-                  label: "Jam Operasional",
-                  value: "Senin – Sabtu · 09.00 – 17.00 WIB",
+                  icon: Phone,
+                  label: "Telepon / WhatsApp",
+                  value: CONTACT.phoneDisplay,
+                  href: CONTACT.whatsappUrl,
                 },
-                { icon: MessageCircle, label: "Area Layanan", value: "[Jabodetabek & sekitarnya]" },
+                {
+                  icon: Mail,
+                  label: "Email",
+                  value: CONTACT.email,
+                  href: `mailto:${CONTACT.email}`,
+                },
+                { icon: Clock, label: "Jam Operasional", value: CONTACT.hours },
+                { icon: MessageCircle, label: "Area Layanan", value: CONTACT.serviceArea },
               ].map((c) => (
                 <div key={c.label} className="flex gap-4 border-b border-border pb-6">
                   <div className="grid h-11 w-11 shrink-0 place-items-center border border-gold/40 text-gold">
@@ -62,7 +134,18 @@ function ContactPage() {
                   </div>
                   <div>
                     <div className="eyebrow">{c.label}</div>
-                    <div className="mt-1 text-foreground/85">{c.value}</div>
+                    {c.href ? (
+                      <a
+                        href={c.href}
+                        target={c.href.startsWith("http") ? "_blank" : undefined}
+                        rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        className="mt-1 block text-foreground/85 transition-colors hover:text-gold"
+                      >
+                        {c.value}
+                      </a>
+                    ) : (
+                      <div className="mt-1 text-foreground/85">{c.value}</div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -76,7 +159,9 @@ function ContactPage() {
                 <Instagram size={16} />
               </a>
               <a
-                href="#"
+                href={CONTACT.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="grid h-11 w-11 place-items-center border border-border text-foreground/70 transition-colors hover:border-gold hover:text-gold"
               >
                 <MessageCircle size={16} />
@@ -97,50 +182,88 @@ function ContactPage() {
                   Terima Kasih!
                 </div>
                 <p className="mt-3 text-sm text-foreground/75">
-                  Permintaan Anda telah kami terima. Tim kami akan segera menghubungi Anda.
+                  Anda akan diarahkan ke WhatsApp untuk mengirim permintaan Anda. Tim kami akan
+                  segera merespon.
                 </p>
               </div>
             ) : (
-              <form
-                className="mt-8 space-y-5"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSent(true);
-                }}
-              >
+              <form className="mt-8 space-y-5" noValidate onSubmit={handleSubmit}>
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <Field label="Nama Lengkap" name="name" required />
-                  <Field label="No. Telepon / WA" name="phone" required />
+                  <Field
+                    label="Nama Lengkap"
+                    name="name"
+                    value={values.name}
+                    onChange={(v) => update("name", v)}
+                    error={errors.name}
+                  />
+                  <Field
+                    label="No. Telepon / WA"
+                    name="phone"
+                    type="tel"
+                    placeholder="0813-xxxx-xxxx"
+                    value={values.phone}
+                    onChange={(v) => update("phone", v)}
+                    error={errors.phone}
+                  />
                 </div>
-                <Field label="Email" name="email" type="email" required />
+                <Field
+                  label="Email"
+                  name="email"
+                  type="email"
+                  value={values.email}
+                  onChange={(v) => update("email", v)}
+                  error={errors.email}
+                />
                 <div>
-                  <label className="eyebrow">Jenis Layanan</label>
+                  <label className="eyebrow" htmlFor="service">
+                    Jenis Layanan
+                  </label>
                   <select
-                    required
-                    className="mt-2 w-full border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-gold focus:outline-none"
-                    defaultValue=""
+                    id="service"
+                    value={values.service}
+                    onChange={(e) => update("service", e.target.value)}
+                    className={cn(
+                      "mt-2 w-full border bg-background px-4 py-3 text-sm text-foreground focus:outline-none",
+                      errors.service
+                        ? "border-red-500 focus:border-red-500"
+                        : "border-border focus:border-gold",
+                    )}
                   >
                     <option value="" disabled>
                       Pilih layanan…
                     </option>
-                    <option>Pekerjaan Sipil</option>
-                    <option>Konstruksi Baja</option>
-                    <option>Desain & Interior</option>
-                    <option>Custom Furniture</option>
-                    <option>Lainnya</option>
+                    {SERVICE_OPTIONS.map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
                   </select>
+                  {errors.service && (
+                    <p className="mt-1.5 text-xs text-red-500">{errors.service}</p>
+                  )}
                 </div>
                 <div>
-                  <label className="eyebrow">Pesan</label>
+                  <label className="eyebrow" htmlFor="message">
+                    Pesan
+                  </label>
                   <textarea
-                    required
+                    id="message"
                     rows={5}
                     placeholder="Ceritakan singkat kebutuhan, lokasi, dan rencana anggaran Anda…"
-                    className="mt-2 w-full border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-gold focus:outline-none"
+                    value={values.message}
+                    onChange={(e) => update("message", e.target.value)}
+                    className={cn(
+                      "mt-2 w-full border bg-background px-4 py-3 text-sm text-foreground focus:outline-none",
+                      errors.message
+                        ? "border-red-500 focus:border-red-500"
+                        : "border-border focus:border-gold",
+                    )}
                   />
+                  {errors.message && (
+                    <p className="mt-1.5 text-xs text-red-500">{errors.message}</p>
+                  )}
                 </div>
+
                 <button type="submit" className="btn-gold w-full">
-                  Kirim Permintaan <Send size={16} />
+                  Kirim via WhatsApp <Send size={16} />
                 </button>
               </form>
             )}
@@ -158,7 +281,7 @@ function ContactPage() {
           <div className="mt-10 aspect-[16/7] w-full border border-border">
             <iframe
               title="Google Maps"
-              src="https://www.google.com/maps?q=Jakarta&output=embed"
+              src={CONTACT.mapEmbedUrl}
               className="h-full w-full grayscale"
               loading="lazy"
             />
@@ -173,12 +296,18 @@ function Field({
   label,
   name,
   type = "text",
-  required,
+  value,
+  onChange,
+  error,
+  placeholder,
 }: {
   label: string;
   name: string;
   type?: string;
-  required?: boolean;
+  value: string;
+  onChange: (value: string) => void;
+  error?: string;
+  placeholder?: string;
 }) {
   return (
     <div>
@@ -189,9 +318,15 @@ function Field({
         id={name}
         name={name}
         type={type}
-        required={required}
-        className="mt-2 w-full border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-gold focus:outline-none"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className={cn(
+          "mt-2 w-full border bg-background px-4 py-3 text-sm text-foreground focus:outline-none",
+          error ? "border-red-500 focus:border-red-500" : "border-border focus:border-gold",
+        )}
       />
+      {error && <p className="mt-1.5 text-xs text-red-500">{error}</p>}
     </div>
   );
 }
