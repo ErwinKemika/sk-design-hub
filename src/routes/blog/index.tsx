@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageHero, SiteLayout } from "@/components/site/SiteLayout";
+import { ArticleCard } from "@/components/site/ArticleCard";
 import { IMAGES } from "@/lib/site-data";
 import { supabase, type Article } from "@/lib/supabase";
 
@@ -46,44 +46,7 @@ function BlogPage() {
         )}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((p) => (
-            <Link
-              key={p.id}
-              to="/blog/$slug"
-              params={{ slug: p.slug }}
-              className="group block border border-border transition-colors hover:border-gold"
-            >
-              <div className="aspect-[16/10] overflow-hidden">
-                <img
-                  src={p.cover_image_url ?? IMAGES.page}
-                  alt=""
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="eyebrow !text-gold">{p.category}</span>
-                  {p.published_at && (
-                    <>
-                      <span>·</span>
-                      <span>
-                        {new Date(p.published_at).toLocaleDateString("id-ID", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </span>
-                    </>
-                  )}
-                </div>
-                <h3 className="mt-3 font-serif text-xl font-semibold leading-snug transition-colors group-hover:text-gold">
-                  {p.title}
-                </h3>
-                <p className="mt-3 text-sm text-foreground/70">{p.excerpt}</p>
-                <div className="mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gold">
-                  Read More <ArrowRight size={14} />
-                </div>
-              </div>
-            </Link>
+            <ArticleCard key={p.id} article={p} />
           ))}
         </div>
       </section>
