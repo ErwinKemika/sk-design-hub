@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
 import { PageHero, SiteLayout } from "@/components/site/SiteLayout";
+import { PortfolioCard } from "@/components/site/PortfolioCard";
 import { CATEGORIES, IMAGES } from "@/lib/site-data";
 import { supabase, type PortfolioItem } from "@/lib/supabase";
 
@@ -66,26 +66,7 @@ function PortfolioPage() {
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((p) => (
-            <Link
-              key={p.id}
-              to="/portfolio/$slug"
-              params={{ slug: p.slug }}
-              className="group relative block aspect-[4/3] overflow-hidden"
-            >
-              <img
-                src={p.cover_image_url ?? IMAGES.page}
-                alt={p.title}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/40 to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                <div className="eyebrow">{p.category}</div>
-                <h3 className="mt-2 font-serif text-xl font-semibold">{p.title}</h3>
-                <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gold">
-                  View Project <ArrowRight size={14} />
-                </div>
-              </div>
-              <div className="pointer-events-none absolute inset-4 border border-gold/0 transition-all duration-500 group-hover:inset-3 group-hover:border-gold/60" />
-            </Link>
+            <PortfolioCard key={p.id} item={p} />
           ))}
         </div>
       </section>

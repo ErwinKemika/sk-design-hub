@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import type { PortfolioItem } from "@/lib/supabase";
 import { IMAGES } from "@/lib/site-data";
@@ -9,6 +9,7 @@ import {
 import { ParticleWave } from "@/components/ui/particle-wave";
 
 export function CircularGallery({ items }: { items: PortfolioItem[] }) {
+  const navigate = useNavigate();
   const galleryData: GalleryItem[] = items.map((item) => ({
     common: item.title,
     binomial: item.category,
@@ -33,7 +34,14 @@ export function CircularGallery({ items }: { items: PortfolioItem[] }) {
           </p>
         </div>
         <div className="relative z-10 mx-auto mt-10 h-[70vh] max-h-[560px] w-full">
-          <CircularGallery3D items={galleryData} radius={420} />
+          <CircularGallery3D
+            items={galleryData}
+            radius={420}
+            onItemClick={(index) => {
+              const item = items[index];
+              if (item) navigate({ to: "/portfolio/$slug", params: { slug: item.slug } });
+            }}
+          />
         </div>
         <div className="relative z-10 mt-10 text-center">
           <Link to="/portfolio" className="btn-outline-gold">

@@ -19,15 +19,24 @@ interface CircularGalleryProps extends HTMLAttributes<HTMLDivElement> {
   radius?: number;
   /** Controls the speed of ambient auto-rotation when idle. */
   autoRotateSpeed?: number;
+  /** Called when a card is genuinely clicked/tapped, not dragged/swiped. */
+  onItemClick?: (index: number) => void;
 }
 
+const CLICK_DRAG_THRESHOLD = 6;
+
 const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
-  ({ items, className, radius = 600, autoRotateSpeed = 0.05, ...props }, ref) => {
+  ({ items, className, radius = 600, autoRotateSpeed = 0.05, onItemClick, ...props }, ref) => {
     const [rotation, setRotation] = useState(0);
     const [isInteracting, setIsInteracting] = useState(false);
     const idleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const animationFrameRef = useRef<number | null>(null);
-    const dragRef = useRef<{ startX: number; startRotation: number } | null>(null);
+    const dragRef = useRef<{
+      startX: number;
+      startRotation: number;
+      moved: boolean;
+      itemIndex: number | null;
+    } | null>(null);
 
     // Ambient auto-rotation while idle (not dragging/scrolling)
     useEffect(() => {
@@ -50,7 +59,9 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     }
 
     function handlePointerDown(e: React.PointerEvent) {
-      dragRef.current = { startX: e.clientX, startRotation: rotation };
+      const cardEl = (e.target as HTMLElement).closest<HTMLElement>("[data-item-index]");
+      const itemIndex = cardEl ? Number(cardEl.dataset.itemIndex) : null;
+      dragRef.current = { startX: e.clientX, startRotation: rotation, moved: false, itemIndex };
       markInteracting();
       (e.target as HTMLElement).setPointerCapture(e.pointerId);
     }
@@ -59,11 +70,16 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
       if (!dragRef.current) return;
       markInteracting();
       const deltaX = e.clientX - dragRef.current.startX;
+      if (Math.abs(deltaX) > CLICK_DRAG_THRESHOLD) dragRef.current.moved = true;
       setRotation(dragRef.current.startRotation + deltaX * 0.3);
     }
 
     function handlePointerUp() {
+      const drag = dragRef.current;
       dragRef.current = null;
+      if (drag && !drag.moved && drag.itemIndex !== null) {
+        onItemClick?.(drag.itemIndex);
+      }
     }
 
     function handleWheel(e: React.WheelEvent) {
@@ -117,8 +133,20 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
             return (
               <div
                 key={item.photo.url}
-                role="group"
+                role={onItemClick ? "link" : "group"}
                 aria-label={item.common}
+                data-item-index={i}
+                tabIndex={onItemClick ? 0 : undefined}
+                onKeyDown={
+                  onItemClick
+                    ? (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          onItemClick(i);
+                        }
+                      }
+                    : undefined
+                }
                 className="absolute h-[280px] w-[220px] sm:h-[340px] sm:w-[260px]"
                 style={{
                   transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
@@ -128,6 +156,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                   marginTop: "-140px",
                   opacity,
                   transition: "opacity 0.3s linear",
+                  cursor: onItemClick ? "pointer" : undefined,
                 }}
               >
                 <div className="group relative h-full w-full overflow-hidden rounded-lg border border-gold/30 bg-charcoal/70 shadow-2xl backdrop-blur-lg">
