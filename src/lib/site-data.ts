@@ -6,7 +6,7 @@ export const IMAGES = {
   civil: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80",
   steel: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80",
   interior: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&q=80",
-  furniture: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=80",
+  furniture: "/images/services/custom-furniture.jpg",
   page: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1920&q=80",
   contact: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80",
 } as const;
