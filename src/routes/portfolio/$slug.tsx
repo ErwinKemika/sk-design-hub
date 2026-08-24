@@ -107,11 +107,11 @@ function PortfolioDetailPage() {
             <div className="mt-2">{item.location || "-"}</div>
           </div>
           <div>
-            <div className="eyebrow">Tahun</div>
+            <div className="eyebrow">Project</div>
             <div className="mt-2">{item.year || "-"}</div>
           </div>
           <div>
-            <div className="eyebrow">Klien</div>
+            <div className="eyebrow">Konsep</div>
             <div className="mt-2">{item.client || "-"}</div>
           </div>
         </div>
