@@ -118,6 +118,8 @@ const WHY = [
   },
 ];
 
+const CLIENTS_PLACEHOLDER = Array.from({ length: 8 }, (_, i) => `Klien ${i + 1}`);
+
 const TESTIMONIALS = [
   {
     name: "[Nama Klien]",
@@ -311,6 +313,56 @@ function HomePage() {
           <Counter end={250} label="Proyek Selesai" />
           <Counter end={180} label="Klien Puas" />
           <Counter end={35} label="Tim Profesional" />
+        </div>
+      </section>
+
+      {/* TRUSTED BY / CLIENTS */}
+      <section className="relative overflow-hidden py-24">
+        <img
+          src="/images/site/indonesia-dots.svg"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[1400px] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.08]"
+        />
+        <div className="relative mx-auto max-w-5xl px-6 text-center lg:px-10">
+          <div className="eyebrow">Klien & Mitra</div>
+          <h2 className="mx-auto mt-4 max-w-3xl font-serif text-3xl font-bold leading-tight md:text-4xl">
+            Dipercaya oleh{" "}
+            <span className="relative inline-block text-gold">
+              50+
+              <svg
+                viewBox="0 0 100 12"
+                className="absolute -bottom-1 left-0 h-3 w-full text-gold"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M2 9 C 25 2, 75 2, 98 9"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  fill="none"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>{" "}
+            klien & mitra dari berbagai sektor
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm text-foreground/60">
+            Rumah tinggal, kantor, ruko, hingga proyek kolaborasi dengan studio desain dan kontraktor
+            mitra di seluruh Indonesia.
+          </p>
+        </div>
+        <div className="relative mx-auto mt-14 grid max-w-5xl grid-cols-2 gap-4 px-6 sm:grid-cols-4 lg:px-10">
+          {CLIENTS_PLACEHOLDER.map((label) => (
+            <div
+              key={label}
+              className="grid h-20 place-items-center border border-dashed border-border text-foreground/30 transition-colors hover:border-gold/40 hover:text-foreground/50"
+            >
+              <div className="flex flex-col items-center gap-1.5">
+                <Building2 size={20} strokeWidth={1.4} />
+                <span className="text-[10px] uppercase tracking-widest">Logo {label}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
