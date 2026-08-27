@@ -122,21 +122,21 @@ const CLIENTS_PLACEHOLDER = Array.from({ length: 8 }, (_, i) => `Klien ${i + 1}`
 
 const TESTIMONIALS = [
   {
-    name: "[Nama Klien]",
-    role: "Pemilik Rumah · Bintaro",
-    text: "Tim SK sangat detail dari desain sampai finishing. Kitchen set kami rapi presisi, hasilnya jauh melebihi ekspektasi.",
+    name: "Ibu Ita",
+    role: "Pemilik · Sekolah Islam Jayawinata",
+    text: "Meja sekolah pesanan kami dibuat kokoh dan rapi, cocok untuk pemakaian harian siswa. Pengerjaan tepat waktu sesuai jumlah yang dibutuhkan.",
     stars: 5,
   },
   {
-    name: "[Nama Klien]",
-    role: "Direktur · PT Placeholder",
-    text: "Pengerjaan struktur baja untuk gudang kami selesai tepat waktu dan sangat kokoh. Komunikasi rapi.",
+    name: "Ibu Sherli",
+    role: "Direktur · PT. Imperial",
+    text: "Lemari showcase untuk outlet Gramedia dibuat presisi dan tampilannya menarik untuk display produk. Tim SK komunikatif dari awal sampai instalasi selesai.",
     stars: 5,
   },
   {
-    name: "[Nama Klien]",
-    role: "Pemilik Kafe · Kemang",
-    text: "Renovasi interior kafe kami dibuat sesuai konsep. Estetik, fungsional, dan tahan lama.",
+    name: "Ibu Lisa Tri Susilowati",
+    role: "Manager · PT. Seowon Manufacturing Indonesia",
+    text: "Pengadaan furniture kantor kami dikerjakan lengkap satu paket, dari meja kerja sampai storage. Rapi, sesuai spesifikasi, dan selesai sesuai jadwal.",
     stars: 5,
   },
 ];
@@ -347,8 +347,8 @@ function HomePage() {
             klien & mitra dari berbagai sektor
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm text-foreground/60">
-            Rumah tinggal, kantor, ruko, hingga proyek kolaborasi dengan studio desain dan kontraktor
-            mitra di seluruh Indonesia.
+            Rumah tinggal, kantor, ruko, hingga proyek kolaborasi dengan studio desain dan
+            kontraktor mitra di seluruh Indonesia.
           </p>
         </div>
         <div className="relative mx-auto mt-14 grid max-w-5xl grid-cols-2 gap-4 px-6 sm:grid-cols-4 lg:px-10">
